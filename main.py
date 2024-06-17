@@ -1,10 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
+import pandas as pd
 
 def get_config(conf):
     with open('config.txt') as config:
         contents = [line for line in config]
-        URL = contents[1]
+        URL = contents[1][:-1]
     match conf:
         case 'URL':
             return URL
@@ -22,11 +23,18 @@ def get_data(url):
     soup = get_soup(url)
     products = soup.find_all('div', {'class': 'single-product'})
     for o in products:
-        try: 
+        try:
             name = o.find('h3').text
-            price = o.find('div', {'class': 'price'}).find('span').text[:-3].replace('\u2009', '')
+            # Price in PLN
+            prices = o.find('div', {'class': 'price'}).find_all('span')
+            if len(prices) == 3:
+                standard_price = prices[2].text[:-3].replace('\u2009', '')
+                price = prices[0].text[:-3].replace('\u2009', '')
+            else:
+                standard_price = 0
+                price = prices[0].text[:-3].replace('\u2009', '')
             dimensions = o.find('div', {'class': 'dimensions'})
-            result += [{'name': name, 'price': int(price), 'dimensions': dimensions}]
+            result += [{'name': name, 'price': int(price), 'standard_price': int(standard_price), 'dimensions': dimensions}]
         except:
             continue
     return result
@@ -36,14 +44,19 @@ def print_results(res):
         print(x)
     print(len(res))
 
-URL = get_config('URL')
-page_num = pages_number(URL)
-
-
-#for i in page_num:
-#    pass
-
+def get_full_data(url, num):
+    result = []
+    for i in num:
+        result += get_data(URL+i)
+    return result
 
 if __name__ == "__main__":
-    print_results(get_data(URL))
+    URL = get_config('URL')
+    page_num = pages_number(URL)
+    
+    data = get_full_data(URL, page_num)
+
+    df = pd.DataFrame(data)
+    print(df['price'].mean())
+    print(df['price'].median())
 
