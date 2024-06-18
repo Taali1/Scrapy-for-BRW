@@ -1,14 +1,18 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+from progress_bar import progress
 
 def get_config(conf):
     with open('config.txt') as config:
         contents = [line for line in config]
         URL = contents[1][:-1]
+        limit = contents[3]
     match conf:
         case 'URL':
             return URL
+        case 'limit':
+            return int(limit)
 
 def get_soup(url):
     return BeautifulSoup(requests.get(url).text, 'html.parser')
@@ -16,7 +20,7 @@ def get_soup(url):
 def pages_number(url) -> int:
     soup = get_soup(url)
     pages = soup.find('div', {'class': 'pager-quantity-wrapper'})
-    return pages.find('a', {'title': 'Ostatnia strona'}).text
+    return int(pages.find('a', {'title': 'Ostatnia strona'}).text)
 
 def get_data(url):
     result = []
@@ -44,17 +48,21 @@ def print_results(res):
         print(x)
     print(len(res))
 
-def get_full_data(url, num):
+def get_full_data(url, num, limit = None):
     result = []
-    for i in num:
-        result += get_data(URL+i)
+    print(f'Theres {num} pages')
+    print(f'Importing {limit} of them')
+    for i in range(num+1)[1:limit]:
+        result += get_data(url+str(i))
+        progress(i, num if limit == None else limit-1, 40)
     return result
 
 if __name__ == "__main__":
     URL = get_config('URL')
+    limit = get_config('limit')
     page_num = pages_number(URL)
     
-    data = get_full_data(URL, page_num)
+    data = get_full_data(URL, page_num, limit)
 
     df = pd.DataFrame(data)
     print(df['price'].mean())
