@@ -32,12 +32,10 @@ def get_data(url):
         else:
             standard_price = 0
             price = prices[0].text[:-3].replace('\u2009', '').replace(',', '.')
-        
-        dimensions = o.find('div', {'class': 'detail'}).find('div', {'class': 'dimensions'})
-        
+
         flag = get_flags(o)
         
-        result += [{'name': name, 'price': float(price), 'standard_price': float(standard_price), 'dimensions': dimensions, 'flag': flag}]
+        result += [{'name': name, 'price': float(price), 'standard_price': float(standard_price), 'flag': flag}]
     return result
 
 def print_results(res):

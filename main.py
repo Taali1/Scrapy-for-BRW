@@ -23,5 +23,5 @@ if __name__ == "__main__":
 
 #   print_results(data)
     
-    with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
-        print(dataframing(data))
+    #with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+    #    print(dataframing(data))
