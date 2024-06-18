@@ -26,13 +26,14 @@ def get_data(url):
         prices = o.find('div', {'class': 'price'}).find_all('span')
         # Standard price is a price without price drop
         if len(prices) == 3:
+            # \u2009 is a light space for thousands serparation. 
             standard_price = prices[2].text[:-3].replace('\u2009', '').replace(',', '.')
             price = prices[0].text[:-3].replace('\u2009', '').replace(',', '.')
         else:
             standard_price = 0
             price = prices[0].text[:-3].replace('\u2009', '').replace(',', '.')
         
-        dimensions = o.find('div', {'class': 'dimensions'})
+        dimensions = o.find('div', {'class': 'detail'}).find('div', {'class': 'dimensions'})
         
         flag = get_flags(o)
         

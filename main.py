@@ -1,5 +1,4 @@
 import pandas as pd
-import requests
 from acquire_data import get_full_data, pages_number, print_results
 from data_wrangling import dataframing
 
