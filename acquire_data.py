@@ -38,11 +38,6 @@ def get_data(url):
         result += [{'name': name, 'price': float(price), 'standard_price': float(standard_price), 'flag': flag}]
     return result
 
-def print_results(res):
-    for x in res:
-        print(x)
-    print(len(res))
-
 def get_full_data(url, num, limit = None):
     result = []
     print(f'Theres {num} pages')

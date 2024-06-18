@@ -1,6 +1,6 @@
 import pandas as pd
-from acquire_data import get_full_data, pages_number, print_results
-from data_wrangling import dataframing
+from acquire_data import get_full_data, pages_number
+from data_wrangling import dataframing, boxplot
 
 def get_config(conf):
     with open('config.txt') as config:
@@ -21,7 +21,9 @@ if __name__ == "__main__":
     
     data = get_full_data(URL, page_num, limit)
 
-#   print_results(data)
-    
-    #with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
-    #    print(dataframing(data))
+    df = dataframing(data)
+
+    df.to_csv('brw.csv')
+    print('Saved dataframe to .csv file')
+
+    #boxplot(dataframing(data))
