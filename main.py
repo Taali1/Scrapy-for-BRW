@@ -27,10 +27,13 @@ def get_data(url):
     soup = get_soup(url)
     products = soup.find_all('div', {'class': 'single-product'})
     for o in products:
+        # Just skips if thers an error because im too lazy and dont want to overcomplicate this code.
+        # There're product divs that play role as ad board and this doesnt contain any data so bs4 is throwing out errors
         try:
             name = o.find('h3').text
             # Price in PLN
             prices = o.find('div', {'class': 'price'}).find_all('span')
+            # Standard price is a price without price drop, i should add scrapping promo tags
             if len(prices) == 3:
                 standard_price = prices[2].text[:-3].replace('\u2009', '')
                 price = prices[0].text[:-3].replace('\u2009', '')
