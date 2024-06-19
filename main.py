@@ -1,6 +1,6 @@
 import pandas as pd
 from acquire_data import get_full_data, pages_number
-from data_wrangling import dataframing, boxplot
+from data_wrangling import dataframing, boxplot, print_dataframe
 
 def get_config(conf):
     with open('config.txt') as config:
@@ -22,6 +22,8 @@ if __name__ == "__main__":
     data = get_full_data(URL, page_num, limit)
 
     df = dataframing(data)
+
+    print(df)
 
     df.to_csv('brw.csv')
     print('Saved dataframe to .csv file')

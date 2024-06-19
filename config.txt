@@ -1,4 +1,4 @@
 URL:
-https://www.brw.pl/meble/?productsPerPage=124&page=1
+https://www.brw.pl/meble/sprzedawca-black-red-white/?productsPerPage=124&page=1
 Limit of pages:
 2

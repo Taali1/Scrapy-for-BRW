@@ -35,7 +35,9 @@ def get_data(url):
 
         flag = get_flags(o)
         
-        result += [{'name': name, 'price': float(price), 'standard_price': float(standard_price), 'flag': flag}]
+        link = 'https://www.brw.pl' + o.find('div', {'class': 'name'}).find('a')['href']
+
+        result += [{'name': name, 'price': float(price), 'standard_price': float(standard_price), 'flag': flag, 'link': link}]
     return result
 
 def get_full_data(url, num, limit = None):
@@ -73,4 +75,14 @@ def get_flags(product):
     return results
 
 
+
+def get_full_single_product(link_list):
+    result = []
+    for link in link_list:
+        soup = get_soup(link)
+        result += get_single_data(soup) 
+    return result
+
+def get_single_data(soup):
+    dimensions = soup.find('div', {'class': 'dimensions'}).find_all('div', {'class': 'item'})
 
