@@ -2,24 +2,20 @@ import pandas as pd
 from acquire_data import get_full_data, pages_number, get_soup
 from data_wrangling import dataframing, boxplot, print_dataframe
 from acquire_single_data import get_single_data
+import json
 
-
-def get_config(conf):
-    with open('config.txt') as config:
-        contents = [line for line in config]
-        URL = contents[1][:-1]
-        limit = contents[3]
-    match conf:
-        case 'URL':
-            return URL
-        case 'limit':
-            return int(limit)
+def get_config():
+   with open('config.json') as file:
+        config = json.load(file)
+   return config
 
 if __name__ == "__main__":
+    config = get_config()
+    
     '''
-    URL = get_config('URL')
-    limit = get_config('limit')
-
+    URL = config["url"]
+    limit = config["limit"]
+    
     page_num = pages_number(URL)
     
     data = get_full_data(URL, page_num, limit)
