@@ -2,7 +2,7 @@ from progress_bar import progress
 from bs4 import BeautifulSoup
 import requests
 
-def get_soup(url):
+def get_soup(url: str) -> str:
     return BeautifulSoup(requests.get(url).text, 'html.parser')
 
 def pages_number(url) -> int:
@@ -34,10 +34,8 @@ def get_data(url):
             price = prices[0].text[:-3].replace('\u2009', '').replace(',', '.')
 
         flag = get_flags(o)
-        
-        link = 'https://www.brw.pl' + o.find('div', {'class': 'name'}).find('a')['href']
 
-        result += [{'name': name, 'price': float(price), 'standard_price': float(standard_price), 'flag': flag, 'link': link}]
+        result += [{'name': name, 'price': float(price), 'standard_price': float(standard_price), 'flag': flag}]
     return result
 
 def get_full_data(url, num, limit = None):
@@ -74,15 +72,8 @@ def get_flags(product):
         except: pass
     return results
 
-
-
-def get_full_single_product(link_list):
+def get_links(soup):
     result = []
-    for link in link_list:
-        soup = get_soup(link)
-        result += get_single_data(soup) 
+    for o in soup.find_all('div', {'class': 'single-product'}):
+        result += ['https://www.brw.pl' + o.find('div', {'class': 'name'}).find('a')['href']]
     return result
-
-def get_single_data(soup):
-    dimensions = soup.find('div', {'class': 'dimensions'}).find_all('div', {'class': 'item'})
-

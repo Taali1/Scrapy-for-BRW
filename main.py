@@ -1,6 +1,8 @@
 import pandas as pd
-from acquire_data import get_full_data, pages_number
+from acquire_data import get_full_data, pages_number, get_soup
 from data_wrangling import dataframing, boxplot, print_dataframe
+from acquire_single_data import get_single_data
+
 
 def get_config(conf):
     with open('config.txt') as config:
@@ -14,6 +16,7 @@ def get_config(conf):
             return int(limit)
 
 if __name__ == "__main__":
+    '''
     URL = get_config('URL')
     limit = get_config('limit')
 
@@ -29,3 +32,6 @@ if __name__ == "__main__":
     print('Saved dataframe to .csv file')
 
     #boxplot(dataframing(data))
+    '''
+    data = get_single_data(get_soup('https://www.brw.pl/szafa-pieciodrzwiowa-stockholm-243-cm-sosna-andersen-biala,15022'))
+    print(dataframing(data))
