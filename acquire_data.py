@@ -20,31 +20,53 @@ def get_data(url):
 
         if o.find('h3'):
             name = o.find('h3').text
+            name = name.replace("\xa0", " ")
+            split_name = name.split(' ')
+            splited = ""
+            try:
+                for i in split_name:
+                    if i == "RTV":
+                        splited += f"{i} "
+
+                    if i[0].isupper() or i[0].isnumeric():
+                        break
+                    else:
+                        splited += f"{i} "
+            except:
+                continue
         else:
             continue
         # Price in PLN
-        prices = o.find('div', {'class': 'price'}).find_all('span')
-        # Standard price is a price without price drop
-        if len(prices) == 3:
-            # \u2009 is a light space for thousands serparation. 
-            standard_price = prices[2].text[:-3].replace('\u2009', '').replace(',', '.')
-            price = prices[0].text[:-3].replace('\u2009', '').replace(',', '.')
-        else:
-            standard_price = 0
-            price = prices[0].text[:-3].replace('\u2009', '').replace(',', '.')
-
+        try:
+            prices = o.find('div', {'class': 'price'}).find_all('span')
+            # Standard price is a price without price drop
+            if len(prices) == 3:
+                # \u2009 is a light space for thousands serparation. 
+                standard_price = prices[2].text[:-3].replace('\u2009', '').replace(',', '.')
+                price = prices[0].text[:-3].replace('\u2009', '').replace(',', '.')
+            else:
+                standard_price = 0
+                price = prices[0].text[:-3].replace('\u2009', '').replace(',', '.')
+        except:
+            standard_price = 0.0
+            price = 0.0
         flag = get_flags(o)
 
-        result += [{'name': name, 'price': float(price), 'standard_price': float(standard_price), 'flag': flag}]
+        result += [{'name': name, 'price': price, 'standard_price': float(standard_price), 'flag': flag, 'category': splited.strip()}]
     return result
 
 def get_full_data(url, num, limit = None):
     result = []
     print(f'Theres {num} pages')
     print(f'Importing {limit} of them')
-    for i in range(num+1)[1:limit]:
-        result += get_data(url+str(i))
-        progress(i, num if limit == None else limit-1, 40)
+    if limit < num:
+        for i in range(num+1)[1:limit]:
+            result += get_data(url+str(i))
+            progress(i, num if limit == None else limit-1, 40)
+    else: 
+        for i in range(1, num+1):
+            result += get_data(url+str(i))
+            progress(i, num, 40)
     return result
 
 def get_flags(product):

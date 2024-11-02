@@ -10,8 +10,10 @@ def get_full_single_product(link_list):
     return result
 
 def get_single_data(soup):
+    print(soup)
     # Name
     name = soup.find('div', {'class': 'name'}).text
+    
 
     # Price and Standard Price in PLN
     prices = soup.find('div', {'class': 'price'}).find_all('span')

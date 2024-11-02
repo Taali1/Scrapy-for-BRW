@@ -10,24 +10,25 @@ def get_config():
    return config
 
 if __name__ == "__main__":
-    config = get_config()
-    
-    '''
-    URL = config["url"]
-    limit = config["limit"]
-    
-    page_num = pages_number(URL)
-    
-    data = get_full_data(URL, page_num, limit)
+   config = get_config()
+   
+   
+   URL = config["url"]
+   limit = config["limit"]
+   
+   page_num = pages_number(URL)
+   
+   data = get_full_data(URL, page_num, limit)
 
-    df = dataframing(data)
+   df = dataframing(data)
 
-    print(df)
+   print(df)
 
-    df.to_csv('brw.csv')
-    print('Saved dataframe to .csv file')
+   df.to_csv('brw.csv')
+   print('Saved dataframe to .csv file')
 
-    #boxplot(dataframing(data))
-    '''
-    data = get_single_data(get_soup('https://www.brw.pl/szafa-pieciodrzwiowa-stockholm-243-cm-sosna-andersen-biala,15022'))
-    print(dataframing(data))
+   #boxplot(dataframing(data))
+   '''
+   data = get_single_data(get_soup('https://www.brw.pl/szafa-pieciodrzwiowa-stockholm-243-cm-sosna-andersen-biala,15022'))
+   print(dataframing(data))
+   '''
